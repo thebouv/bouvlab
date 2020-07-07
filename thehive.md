@@ -20,6 +20,9 @@ Kubernetes cluster on 5 Raspberry Pi 4 Bs. This will be a learning platform and 
 
 ### Tutorials I'm Piecing Together
 
+https://blog.alexellis.io/test-drive-k3s-on-raspberry-pi/  
+
+
 ### Some Choices of My Own
 Ubuntu uses cloud-init and boots up with DHCP. I want to set static IPs because I plan to make the cluster mobile for hackathons and so I know on my own network (or vlan for the homelab) that I know the addresses.
 
@@ -34,6 +37,12 @@ On first boot, check the ip address it was assigned so you can ssh into it from 
     *  I set the static IPs for my cluster to be 200 for kubernetes main (dubbed queen), and 201, 202, etc for the workers (dubbed drones)
     *  Set the DNS to be Google's DNS as primary/secondary and add in Cloudflare as well.
 
+Install Docker on all the Raspberry Pi 4s. Instead of using `snap` as I did at first, the Rancher [docs say there are some problems](https://rancher.com/docs/k3s/latest/en/advanced/#using-docker-as-the-container-runtime) with that so to install via:
 
+`curl https://releases.rancher.com/install-docker/19.03.sh | sh`
+
+And to be able to run Docker commands as a non-root user:
+
+`sudo usermod -aG docker ubuntu`
 
 ### Misc
