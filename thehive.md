@@ -26,7 +26,7 @@ https://blog.alexellis.io/test-drive-k3s-on-raspberry-pi/
 ### Some Choices of My Own
 Ubuntu uses cloud-init and boots up with DHCP. I want to set static IPs because I plan to make the cluster mobile for hackathons and so I know on my own network (or vlan for the homelab) that I know the addresses.
 
-On first boot, check the ip address it was assigned so you can ssh into it from my laptop.
+On first boot, check the ip address it was assigned so I can ssh into it from my laptop.
 
 `sudo rm /etc/netplan/50-cloud-init.yaml`  
 
@@ -37,6 +37,12 @@ On first boot, check the ip address it was assigned so you can ssh into it from 
     *  I set the static IPs for my cluster to be 200 for kubernetes main (dubbed queen), and 201, 202, etc for the workers (dubbed drones)
     *  Set the DNS to be Google's DNS as primary/secondary and add in Cloudflare as well.
 
+By default `avahi-daemon` is not installed on Ubuntu 20.04, or at least not on the [version I used](https://ubuntu.com/download/raspberry-pi/thank-you?version=20.04&architecture=arm64+raspi).
+
+In order to be able to use hostnames for ease:
+
+`sudo apt install avahi-daemon`
+
 Install Docker on all the Raspberry Pi 4s. Instead of using `snap` as I did at first, the Rancher [docs say there are some problems](https://rancher.com/docs/k3s/latest/en/advanced/#using-docker-as-the-container-runtime) with that so to install via:
 
 `curl https://releases.rancher.com/install-docker/19.03.sh | sh`
@@ -44,5 +50,7 @@ Install Docker on all the Raspberry Pi 4s. Instead of using `snap` as I did at f
 And to be able to run Docker commands as a non-root user:
 
 `sudo usermod -aG docker ubuntu`
+
+Change GPU memsplit by editing `/boot/firmware/usercfg.txt` with `gpu_mem=16`.  Since I won't be running any graphics, this is the lowest value you can set for the mem split. This means each Pi can use maximum RAM to run things. Default is 64, so this is a nice little savings of 48mb of RAM.
 
 ### Misc
