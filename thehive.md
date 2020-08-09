@@ -52,7 +52,9 @@ On first boot, check the ip address it was assigned so I can ssh into it from my
 
 By default `avahi-daemon` is not installed on Ubuntu 20.04, or at least not on the [version I used](https://ubuntu.com/download/raspberry-pi/thank-you?version=20.04&architecture=arm64+raspi).
 
-In order to be able to use hostnames for ease:
+I wanted to set the hostname too and though there are several ways to do this (/etc/hosts, hostname command, hostnamectl), since we're using cloud init I just set the hostname in `/etc/cloud/cloud.cfg`
+
+In order to be able to use hostnames on local tld for ease:
 
 `sudo apt install avahi-daemon`
 
@@ -64,6 +66,6 @@ And to be able to run Docker commands as a non-root user:
 
 `sudo usermod -aG docker ubuntu`
 
-Change GPU memsplit by editing `/boot/firmware/usercfg.txt` with `gpu_mem=16`.  Since I won't be running any graphics, this is the lowest value you can set for the mem split. This means each Pi can use maximum RAM to run things. Default is 64, so this is a nice little savings of 48mb of RAM.
-
 ### Misc
+
+Change GPU memsplit by editing `/boot/firmware/usercfg.txt` with `gpu_mem=16`.  Since I won't be running any graphics, this is the lowest value you can set for the mem split. This means each Pi can use maximum RAM to run things. Default is 64, so this is a nice little savings of 48mb of RAM.
