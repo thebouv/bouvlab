@@ -24,13 +24,26 @@ https://blog.alexellis.io/test-drive-k3s-on-raspberry-pi/
 
 
 ### Some Choices of My Own
+
+#### Ubuntu instead of Raspbian ####
+
+I use Ubuntu 20.04 LTS 64bit and follow [this tutorial](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview) to image my SD cards.
+
+Since I'm using Ubuntu instead of Raspbian, it autoconnects to the internet over ethernet and also enables ssh by default.  But to find it on my network, a neat trick is to grep the LAN's arp tables to find all devices that begin with *b8:27:eb* or *dc:a6:32* which all Raspberry Pi ethernet devices start with.
+
+`arp -a | grep -i "b8:27:eb\|dc:a6:32"`
+
+Now that I know the ip, I can ssh into it per rest of tutorials mentioned above.
+
+#### Ubuntu cloud-init ####
+
 Ubuntu uses cloud-init and boots up with DHCP. I want to set static IPs because I plan to make the cluster mobile for hackathons and so I know on my own network (or vlan for the homelab) that I know the addresses.
 
 On first boot, check the ip address it was assigned so I can ssh into it from my laptop.
 
 `sudo rm /etc/netplan/50-cloud-init.yaml`  
 
-`sudo vi [/etc/netplan/01-netcfg.yaml](01-netcfg.yaml)`  
+`sudo vi `[/etc/netplan/01-netcfg.yaml](01-netcfg.yaml)  
 
 *  Notes for [01-netcfg.yaml](01-netcfg.yaml)
     *  My home DHCP only creates addresses from 10.0.0.2 - 10.0.0.199
